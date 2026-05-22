@@ -68,23 +68,46 @@
 
     <script src="./Java Script/navbar.js"></script>
 
-    <script>
-        // Función que sincroniza la carga del DOM con la inicialización del cliente (navbar.js)
-        async function cargarDatosFormulario() {
-            if (typeof mizuClient === 'undefined' || !usuarioActual) {
-                setTimeout(cargarDatosFormulario, 100);
+<script>
+        // 1. Esperamos a que el script del navbar cargue el SDK de Supabase
+        async function inicializarDashboard() {
+            // Esperamos un momento a que 'supabase' esté definido en el navegador
+            if (typeof supabase === 'undefined') {
+                setTimeout(inicializarDashboard, 200);
                 return;
             }
-            document.getElementById('loader').classList.add('hidden');
-            document.getElementById('zona-privada').classList.remove('hidden');
+
+            // 2. Usamos la misma configuración que en navbar.js
+            const SUPABASE_URL = "https://kdwqdjfafywzttupgdvw.supabase.co";
+            const SUPABASE_ANON_KEY = "sb_publishable_TmaZmfzJZU9WHpNMQgQ2wg_xZvPknuT";
+            const client = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+            // 3. Obtenemos la sesión directamente
+            const { data: { session } } = await client.auth.getSession();
+
+            if (session) {
+                console.log("Usuario autenticado:", session.user.email);
+                
+                // Ocultar loader y mostrar zona privada
+                document.getElementById('loader').classList.add('hidden');
+                document.getElementById('zona-privada').classList.remove('hidden');
+                
+                // Aquí podrías cargar datos desde tu DB si lo necesitas:
+                // cargarDatosDesdeSupabase(session.user.id);
+            } else {
+                // Si no hay sesión, regresamos al inicio
+                window.location.href = './index.html';
+            }
         }
+
+        // Ejecutar al cargar la página
+        window.onload = inicializarDashboard;
 
         async function actualizarPerfil(event) {
             event.preventDefault();
-            // Lógica de Supabase aquí
+            alert("Perfil guardado con éxito");
+            // Aquí irá tu lógica de supabase.from('perfiles').upsert(...)
         }
-
-        window.onload = cargarDatosFormulario;
     </script>
 </body>
 </html>

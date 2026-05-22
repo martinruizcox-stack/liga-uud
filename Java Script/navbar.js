@@ -1,5 +1,5 @@
 // CONFIGURACIÓN GLOBAL DE SUPABASE
-const SUPABASE_URL = "https://kdwqdjfafywzttupgdvw.supabase.co/rest/v1/"; 
+const SUPABASE_URL = "https://kdwqdjfafywzttupgdvw.supabase.co"; 
 const SUPABASE_ANON_KEY = "sb_publishable_TmaZmfzJZU9WHpNMQgQ2wg_xZvPknuT";
 
 let mizuClient = null;

@@ -69,21 +69,19 @@
     <script src="./Java Script/navbar.js"></script>
 
     <script>
-        // Lógica de carga: espera a que navbar.js inicialice la sesión para cargar datos
+        // Función que sincroniza la carga del DOM con la inicialización del cliente (navbar.js)
         async function cargarDatosFormulario() {
-            if (!mizuClient || !usuarioActual) {
+            if (typeof mizuClient === 'undefined' || !usuarioActual) {
                 setTimeout(cargarDatosFormulario, 100);
                 return;
             }
             document.getElementById('loader').classList.add('hidden');
             document.getElementById('zona-privada').classList.remove('hidden');
-            // ... (resto de tu lógica de carga desde Supabase)
         }
 
-        // Función que guarda los cambios en Supabase
         async function actualizarPerfil(event) {
             event.preventDefault();
-            // ... (tu lógica de guardado)
+            // Lógica de Supabase aquí
         }
 
         window.onload = cargarDatosFormulario;

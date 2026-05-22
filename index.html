@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Liga Untap Upkeep Draw - Inicio</title>
-    
     <link rel="icon" type="image/jpeg" href="./Untap Upkeep Draw logo.jpg">
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
@@ -14,14 +13,11 @@
     <div id="global-navbar"></div>
 
     <main class="container mx-auto p-6 flex-grow max-w-6xl space-y-12">
-        
         <section class="text-center py-10 space-y-4">
             <div class="inline-flex items-center gap-2 bg-purple-950/40 border border-purple-500/30 px-4 py-1.5 rounded-full text-purple-300 text-xs font-semibold tracking-wide">
                 ✨ Temporada 04 - Marvel Super Heroes. Junio 2026
             </div>
-            <h2 class="text-4xl md:text-5xl font-extrabold text-white tracking-tight">
-                Untap Upkeep Draw
-            </h2>
+            <h2 class="text-4xl md:text-5xl font-extrabold text-white tracking-tight">Untap Upkeep Draw</h2>
             <p class="text-gray-400 max-w-2xl mx-auto text-base md:text-lg">
                 Portal oficial para la comunidad. Monitorea partidas, analiza el meta y escala hacia el top.
             </p>
@@ -29,43 +25,44 @@
 
         <section class="grid grid-cols-1 gap-8 items-start">
             <div class="bg-gray-800/80 border border-gray-700/60 rounded-2xl p-6 shadow-xl space-y-6">
-                
-                <div class="flex flex-wrap gap-2 border-b border-gray-700 pb-4">
-                    <button onclick="cambiarTabPublica('estadisticas')" id="tab-estadisticas" class="px-4 py-2 text-xs font-bold rounded-lg transition-all bg-purple-600 text-white">Estadísticas</button>
-                    <button onclick="cambiarTabPublica('liga-actual')" id="tab-liga-actual" class="px-4 py-2 text-xs font-bold rounded-lg transition-all bg-gray-900 text-gray-400">Liga Actual</button>
-                    <button onclick="cambiarTabPublica('ligas-pasadas')" id="tab-ligas-pasadas" class="px-4 py-2 text-xs font-bold rounded-lg transition-all bg-gray-900 text-gray-400">Ligas Pasadas</button>
-                    <button onclick="cambiarTabPublica('proxima-liga')" id="tab-proxima-liga" class="px-4 py-2 text-xs font-bold rounded-lg transition-all bg-gray-900 text-gray-400">Próxima Liga</button>
+                <div id="tabs-container" class="flex flex-wrap gap-2 border-b border-gray-700 pb-4">
+                    <button onclick="cambiarTabPublica('estadisticas')" id="tab-estadisticas" class="px-4 py-2 text-xs font-bold rounded-lg transition-all bg-gray-900 text-gray-400 hover:text-white">Estadísticas</button>
+                    <button onclick="cambiarTabPublica('liga-actual')" id="tab-liga-actual" class="px-4 py-2 text-xs font-bold rounded-lg transition-all bg-purple-600 text-white">Liga Actual</button>
+                    <button onclick="cambiarTabPublica('ligas-pasadas')" id="tab-ligas-pasadas" class="px-4 py-2 text-xs font-bold rounded-lg transition-all bg-gray-900 text-gray-400 hover:text-white">Ligas Pasadas</button>
+                    <button onclick="cambiarTabPublica('proxima-liga')" id="tab-proxima-liga" class="px-4 py-2 text-xs font-bold rounded-lg transition-all bg-gray-900 text-gray-400 hover:text-white">Próxima Liga</button>
                 </div>
-
-                <div id="contenido-tab-publica" class="min-h-[200px] w-full p-2"></div>
+                <div id="contenido-tab-publica" class="min-h-[200px] w-full p-2 text-gray-300"></div>
             </div>
         </section>
     </main>
 
-    <footer class="bg-gray-800 text-center p-4 text-xs text-gray-500 border-t border-gray-700">
-        &copy; 2026 Untap Upkeep Draw cEDH League.
-    </footer>
+    <footer class="bg-gray-800 text-center p-4 text-xs text-gray-500 border-t border-gray-700">&copy; 2026 Untap Upkeep Draw cEDH League.</footer>
 
     <script src="./Java Script/navbar.js"></script>
 
     <script>
-        // Objeto que contiene el texto de cada pestaña
         const bloquesInformativos = {
-            'liga-actual': `...`, 
-            'estadisticas': `...`,
-            'ligas-pasadas': `...`,
-            'proxima-liga': `...`
+            'liga-actual': `<h4 class="text-sm font-bold text-purple-400">Liga Activa</h4><p class="text-xs">Los standings de la liga activa se habilitarán próximamente.</p>`,
+            'estadisticas': `<h4 class="text-sm font-bold text-purple-400">Estadísticas</h4><p class="text-xs">Datos históricos de la comunidad.</p>`,
+            'ligas-pasadas': `<h4 class="text-sm font-bold text-purple-400">Historial</h4><p class="text-xs">Revisa los podios de ligas anteriores.</p>`,
+            'proxima-liga': `<h4 class="text-sm font-bold text-purple-400">Próxima Liga</h4><p class="text-xs">Mantente atento a los anuncios de inscripciones.</p>`
         };
 
-        // Función que actualiza el contenido según el botón presionado
         function cambiarTabPublica(tabId) {
-            // ... (lógica de cambio de estilo y contenido)
+            // Cambiar estilos de botones
+            document.querySelectorAll('#tabs-container button').forEach(btn => {
+                btn.classList.replace('bg-purple-600', 'bg-gray-900');
+                btn.classList.replace('text-white', 'text-gray-400');
+            });
+            const activeBtn = document.getElementById(`tab-${tabId}`);
+            activeBtn.classList.replace('bg-gray-900', 'bg-purple-600');
+            activeBtn.classList.replace('text-gray-400', 'text-white');
+            
+            // Cargar contenido
+            document.getElementById('contenido-tab-publica').innerHTML = bloquesInformativos[tabId];
         }
 
-        // Inicialización al cargar la página
-        document.addEventListener("DOMContentLoaded", () => {
-            cambiarTabPublica('liga-actual');
-        });
+        document.addEventListener("DOMContentLoaded", () => cambiarTabPublica('liga-actual'));
     </script>
 </body>
 </html>

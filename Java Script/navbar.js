@@ -1,22 +1,26 @@
 // Configuración de Supabase
 const SUPABASE_URL = "https://kdwqdjfafywzttupgdvw.supabase.co";
 const SUPABASE_ANON_KEY = "sb_publishable_TmaZmfzJZU9WHpNMQgQ2wg_xZvPknuT";
+// Usamos el cliente global de supabase cargado por el CDN
 const client = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
 async function renderNavbar(tituloPagina) {
     const navContainer = document.getElementById('navbar');
+    // Si no existe el contenedor, no hacemos nada
     if (!navContainer) return;
 
     const { data: { session } } = await client.auth.getSession();
 
     const authButton = session 
         ? `<button onclick="logout()" class="bg-red-600 px-4 py-2 rounded text-white text-sm font-bold hover:bg-red-700">Cerrar Sesión</button>`
-        : `<a href="index.html" class="bg-purple-600 px-4 py-2 rounded text-white text-sm font-bold hover:bg-purple-700">Log In</a>`;
+        : `<a href="login.html" class="bg-purple-600 px-4 py-2 rounded text-white text-sm font-bold hover:bg-purple-700">Log In</a>`;
 
     navContainer.innerHTML = `
         <header class="flex items-center justify-between p-4 bg-gray-900 border-b border-gray-800 shadow-md">
             <img src="Imagenes/Untap Upkeep Draw logo.jpg" alt="Logo" class="h-12 w-auto">
+            
             <h1 class="text-xl font-bold tracking-wider text-white">${tituloPagina}</h1>
+            
             <div>${authButton}</div>
         </header>
     `;

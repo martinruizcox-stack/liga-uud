@@ -23,7 +23,7 @@
                 Untap Upkeep Draw
             </h2>
             <p class="text-gray-400 max-w-2xl mx-auto text-base md:text-lg">
-                Portal oficial para la comunidad de <span class="text-purple-400 font-semibold">Untap Upkeep Draw</span>. Monitorea tus partidas, analiza el metajuego local, gestiona tus listas y escala hacia el top.
+                Portal oficial para la comunidad. Monitorea partidas, analiza el meta y escala hacia el top.
             </p>
         </section>
 
@@ -31,18 +31,10 @@
             <div class="bg-gray-800/80 border border-gray-700/60 rounded-2xl p-6 shadow-xl space-y-6">
                 
                 <div class="flex flex-wrap gap-2 border-b border-gray-700 pb-4">
-                    <button onclick="cambiarTabPublica('estadisticas')" id="tab-estadisticas" class="px-4 py-2 text-xs font-bold rounded-lg transition-all bg-purple-600 text-white">
-                        Estadísticas Globales
-                    </button>
-                    <button onclick="cambiarTabPublica('liga-actual')" id="tab-liga-actual" class="px-4 py-2 text-xs font-bold rounded-lg transition-all bg-gray-900 text-gray-400 hover:text-white">
-                        Liga Actual
-                    </button>
-                    <button onclick="cambiarTabPublica('ligas-pasadas')" id="tab-ligas-pasadas" class="px-4 py-2 text-xs font-bold rounded-lg transition-all bg-gray-900 text-gray-400 hover:text-white">
-                        Ligas Pasadas
-                    </button>
-                    <button onclick="cambiarTabPublica('proxima-liga')" id="tab-proxima-liga" class="px-4 py-2 text-xs font-bold rounded-lg transition-all bg-gray-900 text-gray-400 hover:text-white">
-                        Próxima Liga
-                    </button>
+                    <button onclick="cambiarTabPublica('estadisticas')" id="tab-estadisticas" class="px-4 py-2 text-xs font-bold rounded-lg transition-all bg-purple-600 text-white">Estadísticas</button>
+                    <button onclick="cambiarTabPublica('liga-actual')" id="tab-liga-actual" class="px-4 py-2 text-xs font-bold rounded-lg transition-all bg-gray-900 text-gray-400">Liga Actual</button>
+                    <button onclick="cambiarTabPublica('ligas-pasadas')" id="tab-ligas-pasadas" class="px-4 py-2 text-xs font-bold rounded-lg transition-all bg-gray-900 text-gray-400">Ligas Pasadas</button>
+                    <button onclick="cambiarTabPublica('proxima-liga')" id="tab-proxima-liga" class="px-4 py-2 text-xs font-bold rounded-lg transition-all bg-gray-900 text-gray-400">Próxima Liga</button>
                 </div>
 
                 <div id="contenido-tab-publica" class="min-h-[200px] w-full p-2"></div>
@@ -50,90 +42,27 @@
         </section>
     </main>
 
-    <script>
-        // Recuerda ajustar el inicializador del script del index para que cargue 'estadisticas' por defecto:
-        document.addEventListener("DOMContentLoaded", () => {
-            cambiarTabPublica('estadisticas');
-        });
-    </script>
-
     <footer class="bg-gray-800 text-center p-4 text-xs text-gray-500 border-t border-gray-700">
         &copy; 2026 Untap Upkeep Draw cEDH League.
     </footer>
 
-    <script src="./navbar.js"></script>
+    <script src="./Java Script/navbar.js"></script>
 
     <script>
-        // Datos simulados para la landing page informativa (Luego se conectarán a Supabase)
+        // Objeto que contiene el texto de cada pestaña
         const bloquesInformativos = {
-            'liga-actual': `
-                <div class="space-y-3 w-full text-left">
-                    <h4 class="text-sm font-bold text-purple-400">Liga Activa: Temporada de Otoño</h4>
-                    <p class="text-xs text-gray-400">Puntajes actualizados de la temporada regular en curso. Las mesas se juegan semanalmente.</p>
-                    <div class="bg-gray-900/60 p-4 rounded-lg border border-gray-850 text-center text-xs text-gray-500">
-                        📊 Los standings detallados de la liga activa se habilitarán próximamente en esta sección.
-                    </div>
-                </div>
-            `,
-            'estadisticas': `
-                <div class="space-y-3 w-full text-left">
-                    <h4 class="text-sm font-bold text-purple-400">Estadísticas Consolidadas</h4>
-                    <p class="text-xs text-gray-400">Datos históricos acumulados de todos los torneos organizados por Untap Upkeep Draw.</p>
-                    <div class="grid grid-cols-2 gap-4 pt-2">
-                        <div class="bg-gray-900/40 border border-gray-800 p-3 rounded-lg text-center"><p class="text-lg font-black text-white">0</p><p class="text-[10px] uppercase tracking-wider text-gray-500 font-bold">Partidas Registradas</p></div>
-                        <div class="bg-gray-900/40 border border-gray-800 p-3 rounded-lg text-center"><p class="text-lg font-black text-white">0%</p><p class="text-[10px] uppercase tracking-wider text-gray-500 font-bold">Win-rate Promedio</p></div>
-                    </div>
-                </div>
-            `,
-            'ligas-pasadas': `
-                <div class="space-y-3 w-full text-left">
-                    <h4 class="text-sm font-bold text-purple-400">Historial de Campeones</h4>
-                    <p class="text-xs text-gray-400">Revisa los podios de las ligas y torneos completados anteriormente.</p>
-                    <ul class="text-xs text-gray-400 space-y-1.5 list-disc list-inside bg-gray-900/30 p-3 rounded-lg border border-gray-850">
-                        <li>🏆 Stack Masters 2026 — Concluido en Febrero</li>
-                        <li>🛡️ Liga de Apertura 2025 — Archivada</li>
-                    </ul>
-                </div>
-            `,
-            'proxima-liga': `
-                <div class="space-y-3 w-full text-left">
-                    <h4 class="text-sm font-bold text-purple-400">Próximos Eventos & Inscripciones</h4>
-                    <p class="text-xs text-gray-400">Mantente al tanto de los siguientes cortes de ligas y torneos especiales clasificados.</p>
-                    <div class="bg-purple-950/20 border border-purple-900/40 p-3 rounded-lg text-xs text-purple-300">
-                        📅 Próximo gran torneo clasificatorio: Fechas e inscripciones se publicarán al cerrar la temporada actual.
-                    </div>
-                </div>
-            `
+            'liga-actual': `...`, 
+            'estadisticas': `...`,
+            'ligas-pasadas': `...`,
+            'proxima-liga': `...`
         };
 
+        // Función que actualiza el contenido según el botón presionado
         function cambiarTabPublica(tabId) {
-            const tabs = ['liga-actual', 'estadisticas', 'ligas-pasadas', 'proxima-liga'];
-            tabs.forEach(t => {
-                const btn = document.getElementById(`tab-${t}`);
-                if (t === tabId) {
-                    btn.className = "px-4 py-2 text-xs font-bold rounded-lg transition-all bg-purple-600 text-white";
-                } else {
-                    btn.className = "px-4 py-2 text-xs font-bold rounded-lg transition-all bg-gray-900 text-gray-400 hover:text-white";
-                }
-            });
-            document.getElementById('contenido-tab-publica').innerHTML = bloquesInformativos[tabId];
+            // ... (lógica de cambio de estilo y contenido)
         }
 
-        async function ingresarConGoogle() {
-            // El puente ahora llama directamente al mizuClient creado por navbar.js
-            if (!mizuClient) return;
-            
-            document.getElementById('msg-autenticando')?.classList.remove('hidden');
-            
-            await mizuClient.auth.signInWithOAuth({
-                provider: 'google',
-                options: {
-                    redirectTo: window.location.origin + window.location.pathname.replace('index.html', '') + 'dashboard.html'
-                }
-            });
-        }
-
-        // Carga la pestaña inicial al cargar la página
+        // Inicialización al cargar la página
         document.addEventListener("DOMContentLoaded", () => {
             cambiarTabPublica('liga-actual');
         });

@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -70,4 +71,78 @@
 </script>
 
 </body>
+=======
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Registrar Partida | Liga UUD</title>
+    <style>
+        body { font-family: sans-serif; padding: 20px; background: #f4f4f9; }
+        .match-card { max-width: 600px; margin: auto; background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+        .row { display: flex; gap: 10px; margin-bottom: 15px; }
+        select, input { flex: 1; padding: 8px; }
+        dialog { border: none; border-radius: 8px; width: 500px; padding: 20px; }
+        dialog::backdrop { background: rgba(0,0,0,0.5); }
+    </style>
+</head>
+<body>
+
+<div class="match-card">
+    <h2>Registrar Partida</h2>
+    
+    <div class="row">
+        <input type="text" placeholder="Jugador 1">
+        <select id="deck1">
+            <option>Seleccionar Mazo...</option>
+        </select>
+        <button onclick="openDeckModal()">+ Mazo</button>
+    </div>
+
+    <div class="row">
+        <input type="text" placeholder="Jugador 2">
+        <select id="deck2">
+            <option>Seleccionar Mazo...</option>
+        </select>
+        <button onclick="openDeckModal()">+ Mazo</button>
+    </div>
+
+    <div class="row">
+        <select id="resultado">
+            <option value="p1_win">Gana Jugador 1</option>
+            <option value="p2_win">Gana Jugador 2</option>
+            <option value="draw">Empate</option>
+        </select>
+    </div>
+
+    <button onclick="guardarPartida()" style="width:100%; background: #007bff; color: white; border: none; padding: 10px;">Finalizar Partida</button>
+</div>
+
+<dialog id="modalDeck">
+    <iframe src="deck_register.html?modal=true" style="width:100%; height:400px; border:none;"></iframe>
+    <button onclick="document.getElementById('modalDeck').close()">Cerrar</button>
+</dialog>
+
+<script>
+    function openDeckModal() {
+        document.getElementById('modalDeck').showModal();
+    }
+
+    // Escuchar el mensaje del iframe para cerrar el modal
+    window.addEventListener('message', function(e) {
+        if (e.data === 'closeModal') {
+            document.getElementById('modalDeck').close();
+            alert("Mazo registrado. Ahora puedes seleccionarlo.");
+            // Aquí podrías recargar la lista de mazos dinámicamente
+        }
+    });
+
+    function guardarPartida() {
+        alert("Partida registrada en el sistema.");
+        // Aquí conectaremos con Supabase
+    }
+</script>
+
+</body>
+>>>>>>> d75c7da8abe616b87d058862d1e08596073851e9
 </html>

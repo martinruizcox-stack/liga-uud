@@ -1,35 +1,38 @@
 <script>
-    // 1. Esperamos a que la librería de Supabase esté disponible
-    async function inicializarDashboard() {
-        if (typeof supabase === 'undefined') {
-            setTimeout(inicializarDashboard, 200);
+    // 1. Configuración
+    const SUPABASE_URL = "https://kdwqdjfafywzttupgdvw.supabase.co";
+    const SUPABASE_ANON_KEY = "sb_publishable_TmaZmfzJZU9WHpNMQgQ2wg_xZvPknuT";
+
+    async function checkSession() {
+        console.log("Iniciando validación de sesión...");
+        
+        // Inicializar cliente
+        const client = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+        // Intentar obtener la sesión (esto procesa automáticamente el hash de la URL)
+        const { data: { session }, error } = await client.auth.getSession();
+
+        if (error) {
+            console.error("Error al obtener sesión:", error);
             return;
         }
 
-        // 2. Definimos el cliente localmente para este archivo
-        const SUPABASE_URL = "https://kdwqdjfafywzttupgdvw.supabase.co";
-        const SUPABASE_ANON_KEY = "sb_publishable_TmaZmfzJZU9WHpNMQgQ2wg_xZvPknuT";
-        const client = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-
-        // 3. Verificamos la sesión directamente
-        const { data: { session } } = await client.auth.getSession();
-
         if (session) {
-            // Usuario autenticado correctamente
+            console.log("Sesión encontrada:", session.user.email);
+            // Si hay sesión, mostramos el contenido
             document.getElementById('loader').classList.add('hidden');
             document.getElementById('zona-privada').classList.remove('hidden');
-            console.log("Dashboard cargado para:", session.user.email);
         } else {
-            // Si no hay sesión, redirigimos al login
+            console.log("No hay sesión, redirigiendo al index...");
+            // Si no hay sesión, regresamos al home
             window.location.href = './index.html';
         }
     }
 
-    // Ejecutar al cargar la página
-    window.onload = inicializarDashboard;
-
-    async function actualizarPerfil(event) {
-        event.preventDefault();
-        alert("Perfil actualizado correctamente");
-    }
+    // Escuchar cambios en la autenticación (por si el token se procesa unos milisegundos después)
+    // Esto es muy útil cuando venimos de un redirect de OAuth
+    window.onload = () => {
+        // Pequeño delay para asegurar que el SDK de Supabase esté listo
+        setTimeout(checkSession, 500);
+    };
 </script>

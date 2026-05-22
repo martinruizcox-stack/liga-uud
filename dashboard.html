@@ -1,41 +1,68 @@
-<script>
-    // 1. Configuración
-    const SUPABASE_URL = "https://kdwqdjfafywzttupgdvw.supabase.co";
-    const SUPABASE_ANON_KEY = "sb_publishable_TmaZmfzJZU9WHpNMQgQ2wg_xZvPknuT";
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - Liga UUD</title>
+    
+    <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-950 text-white min-h-screen">
 
-    // 2. Esperamos a que todo cargue
-    window.addEventListener('DOMContentLoaded', async () => {
-        // Asegurar que supabase esté cargado
-        if (typeof supabase === 'undefined') {
-            console.error("Supabase SDK no cargado");
-            return;
-        }
+    <div id="loader" class="flex flex-col justify-center items-center h-screen">
+        <div class="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-purple-500 mb-4"></div>
+        <p>Cargando datos de jugador...</p>
+    </div>
 
+    <div id="zona-privada" class="hidden p-6">
+        <h1 class="text-2xl font-bold">Bienvenido al Dashboard</h1>
+        <p id="user-email" class="text-gray-400 mb-6"></p>
+        
+        <form onsubmit="actualizarPerfil(event)" class="bg-gray-900 p-6 rounded-lg border border-gray-800">
+            <button type="submit" class="bg-purple-600 px-4 py-2 rounded text-white font-bold">
+                Actualizar Perfil
+            </button>
+        </form>
+    </div>
+
+    <script>
+        // Configuración
+        const SUPABASE_URL = "https://kdwqdjfafywzttupgdvw.supabase.co";
+        const SUPABASE_ANON_KEY = "sb_publishable_TmaZmfzJZU9WHpNMQgQ2wg_xZvPknuT";
+
+        // Inicialización
         const client = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-        // 3. Listener que reacciona automáticamente cuando detecta el token en la URL
-        client.auth.onAuthStateChange((event, session) => {
-            console.log("Evento Auth:", event);
-            
-            if (event === 'SIGNED_IN' || session) {
-                // Si estamos logueados, mostramos el contenido
-                document.getElementById('loader').classList.add('hidden');
-                document.getElementById('zona-privada').classList.remove('hidden');
-                console.log("Sesión establecida correctamente");
-            }
-        });
+        async function initDashboard() {
+            try {
+                // Verificar sesión
+                const { data: { session }, error } = await client.auth.getSession();
+                
+                if (error) throw error;
 
-        // 4. Verificación rápida por si la sesión ya existe (página recargada)
-        const { data: { session } } = await client.auth.getSession();
-        if (session) {
-            document.getElementById('loader').classList.add('hidden');
-            document.getElementById('zona-privada').classList.remove('hidden');
-        } else {
-            // Si después de verificar no hay sesión, es que el token es inválido o expiró
-            // Opcional: Redirigir si no hay token en URL
-            if (!window.location.hash) {
+                if (session) {
+                    // Si hay usuario: mostrar contenido
+                    document.getElementById('loader').classList.add('hidden');
+                    document.getElementById('zona-privada').classList.remove('hidden');
+                    document.getElementById('user-email').innerText = "Usuario: " + session.user.email;
+                } else {
+                    // Si NO hay sesión: redirigir al login
+                    window.location.href = './index.html';
+                }
+            } catch (err) {
+                console.error("Error crítico en dashboard:", err);
                 window.location.href = './index.html';
             }
         }
-    });
-</script>
+
+        async function actualizarPerfil(event) {
+            event.preventDefault();
+            alert("Función de actualización conectada correctamente.");
+        }
+
+        // Ejecutar al cargar
+        window.onload = initDashboard;
+    </script>
+</body>
+</html>

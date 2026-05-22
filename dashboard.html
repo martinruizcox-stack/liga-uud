@@ -5,32 +5,20 @@
     <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body class="bg-gray-950 text-white">
-    
-    <div id="navbar" class="p-4 flex justify-end"></div>
-
-    <div id="loader" class="flex justify-center items-center h-screen">
-        <p>Cargando datos de jugador...</p>
-    </div>
-
-    <div id="zona-privada" class="hidden p-6">
-        <h1 class="text-2xl">Bienvenido al Dashboard</h1>
-    </div>
-
+<body class="bg-gray-950 text-white min-h-screen">
+    <div id="navbar"></div>
+    <main class="p-8 max-w-4xl mx-auto">
+        <h1 class="text-2xl font-bold">Bienvenido al Dashboard</h1>
+        <div id="user-info" class="mt-4">Cargando...</div>
+    </main>
     <script src="navbar.js"></script>
     <script>
-        const client = supabase.createClient("https://kdwqdjfafywzttupgdvw.supabase.co", "sb_publishable_TmaZmfzJZU9WHpNMQgQ2wg_xZvPknuT");
-
-        async function initDashboard() {
-            const { data: { session } } = await client.auth.getSession();
-            if (session) {
-                document.getElementById('loader').classList.add('hidden');
-                document.getElementById('zona-privada').classList.remove('hidden');
-            } else {
-                window.location.href = './index.html';
-            }
-        }
-        window.onload = initDashboard;
+        renderNavbar('DASHBOARD');
+        // Protección simple
+        client.auth.getSession().then(({data}) => {
+            if (!data.session) window.location.href = 'index.html';
+            document.getElementById('user-info').innerText = 'Usuario: ' + data.session.user.email;
+        });
     </script>
 </body>
 </html>

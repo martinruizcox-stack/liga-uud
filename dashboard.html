@@ -3,36 +3,39 @@
     const SUPABASE_URL = "https://kdwqdjfafywzttupgdvw.supabase.co";
     const SUPABASE_ANON_KEY = "sb_publishable_TmaZmfzJZU9WHpNMQgQ2wg_xZvPknuT";
 
-    async function checkSession() {
-        console.log("Iniciando validación de sesión...");
-        
-        // Inicializar cliente
-        const client = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-
-        // Intentar obtener la sesión (esto procesa automáticamente el hash de la URL)
-        const { data: { session }, error } = await client.auth.getSession();
-
-        if (error) {
-            console.error("Error al obtener sesión:", error);
+    // 2. Esperamos a que todo cargue
+    window.addEventListener('DOMContentLoaded', async () => {
+        // Asegurar que supabase esté cargado
+        if (typeof supabase === 'undefined') {
+            console.error("Supabase SDK no cargado");
             return;
         }
 
+        const client = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+        // 3. Listener que reacciona automáticamente cuando detecta el token en la URL
+        client.auth.onAuthStateChange((event, session) => {
+            console.log("Evento Auth:", event);
+            
+            if (event === 'SIGNED_IN' || session) {
+                // Si estamos logueados, mostramos el contenido
+                document.getElementById('loader').classList.add('hidden');
+                document.getElementById('zona-privada').classList.remove('hidden');
+                console.log("Sesión establecida correctamente");
+            }
+        });
+
+        // 4. Verificación rápida por si la sesión ya existe (página recargada)
+        const { data: { session } } = await client.auth.getSession();
         if (session) {
-            console.log("Sesión encontrada:", session.user.email);
-            // Si hay sesión, mostramos el contenido
             document.getElementById('loader').classList.add('hidden');
             document.getElementById('zona-privada').classList.remove('hidden');
         } else {
-            console.log("No hay sesión, redirigiendo al index...");
-            // Si no hay sesión, regresamos al home
-            window.location.href = './index.html';
+            // Si después de verificar no hay sesión, es que el token es inválido o expiró
+            // Opcional: Redirigir si no hay token en URL
+            if (!window.location.hash) {
+                window.location.href = './index.html';
+            }
         }
-    }
-
-    // Escuchar cambios en la autenticación (por si el token se procesa unos milisegundos después)
-    // Esto es muy útil cuando venimos de un redirect de OAuth
-    window.onload = () => {
-        // Pequeño delay para asegurar que el SDK de Supabase esté listo
-        setTimeout(checkSession, 500);
-    };
+    });
 </script>

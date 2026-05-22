@@ -10,8 +10,8 @@ async function renderNavbar(tituloPagina) {
     const { data: { session } } = await client.auth.getSession();
 
     const authButton = session 
-        ? `<button onclick="logout()" class="bg-red-600 px-4 py-2 rounded text-white text-sm font-bold">Cerrar Sesión</button>`
-        : `<a href="index.html" class="bg-purple-600 px-4 py-2 rounded text-white text-sm font-bold">Log In</a>`;
+        ? `<button onclick="logout()" class="bg-red-600 px-4 py-2 rounded text-white text-sm font-bold hover:bg-red-700">Cerrar Sesión</button>`
+        : `<a href="index.html" class="bg-purple-600 px-4 py-2 rounded text-white text-sm font-bold hover:bg-purple-700">Log In</a>`;
 
     navContainer.innerHTML = `
         <header class="flex items-center justify-between p-4 bg-gray-900 border-b border-gray-800 shadow-md">

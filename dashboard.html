@@ -1,113 +1,35 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Liga Untap Upkeep Draw - Panel de Control</title>
-    
-    <link rel="icon" type="image/jpeg" href="./Untap Upkeep Draw logo.jpg">
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
-</head>
-<body class="bg-gray-900 text-gray-100 font-sans min-h-screen flex flex-col justify-between select-none">
-
-    <div id="global-navbar"></div>
-
-    <main class="container mx-auto p-6 flex-grow flex flex-col items-center justify-center">
-        
-        <div id="loader" class="text-center py-12">
-            <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-purple-500 mx-auto mb-4"></div>
-            <p class="text-gray-400 text-sm">Cargando datos de jugador...</p>
-        </div>
-
-        <section id="zona-privada" class="w-full max-w-xl bg-gray-800 p-8 rounded-xl shadow-2xl border border-gray-700 hidden">
-            <div class="border-b border-gray-700 pb-4 mb-6">
-                <h2 class="text-2xl font-bold text-purple-400">Datos del Competidor</h2>
-                <p class="text-xs text-gray-400">Identificadores para emparejamientos y reportes.</p>
-            </div>
-            
-            <form onsubmit="actualizarPerfil(event)" class="space-y-5">
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div>
-                        <label class="block text-xs font-semibold text-gray-400 uppercase tracking-wider mb-1">Nombre</label>
-                        <input type="text" id="reg-nombre" required class="w-full bg-gray-900 border border-gray-700 rounded-lg px-4 py-2.5 text-sm text-gray-300 focus:outline-none focus:border-purple-500">
-                    </div>
-                    <div>
-                        <label class="block text-xs font-semibold text-gray-400 uppercase tracking-wider mb-1">Apellido</label>
-                        <input type="text" id="reg-apellido" required class="w-full bg-gray-900 border border-gray-700 rounded-lg px-4 py-2.5 text-sm text-gray-300 focus:outline-none focus:border-purple-500">
-                    </div>
-                </div>
-                <div>
-                    <label class="block text-xs font-semibold text-purple-400 uppercase tracking-wider mb-1">Sobrenombre (ID en Mesa)</label>
-                    <input type="text" id="reg-sobrenombre" required class="w-full bg-gray-900 border border-purple-500/50 rounded-lg px-4 py-2.5 text-sm text-white focus:outline-none focus:border-purple-500">
-                </div>
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                    <div>
-                        <label class="block text-xs font-semibold text-gray-400 uppercase tracking-wider mb-1">Discord</label>
-                        <button type="button" class="w-full bg-purple-600/30 border border-purple-500/40 text-purple-300 font-medium py-2.5 px-3 rounded-lg text-xs cursor-default">Conectado</button>
-                    </div>
-                    <div>
-                        <label class="block text-xs font-semibold text-gray-400 uppercase tracking-wider mb-1">Usuario Topdeck.gg</label>
-                        <input type="text" id="reg-topdeck" required placeholder="usuario" class="w-full bg-gray-900 border border-gray-700 rounded-lg px-3 py-2.5 text-sm text-gray-300 focus:outline-none focus:border-purple-500">
-                    </div>
-                    <div>
-                        <label class="block text-xs font-semibold text-gray-400 uppercase tracking-wider mb-1">Teléfono</label>
-                        <input type="tel" id="reg-telefono" required placeholder="+569..." class="w-full bg-gray-900 border border-gray-700 rounded-lg px-4 py-2.5 text-sm text-gray-300 focus:outline-none focus:border-purple-500">
-                    </div>
-                </div>
-                <button type="submit" class="w-full bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-white font-bold py-3 px-4 rounded-lg shadow-lg transition-all mt-4">
-                    Guardar Perfil
-                </button>
-            </form>
-        </section>
-    </main>
-
-    <footer class="bg-gray-800 text-center p-4 text-xs text-gray-500 border-t border-gray-700">
-        &copy; 2026 Untap Upkeep Draw cEDH League.
-    </footer>
-
-    <script src="./Java Script/navbar.js"></script>
-
 <script>
-        // 1. Esperamos a que el script del navbar cargue el SDK de Supabase
-        async function inicializarDashboard() {
-            // Esperamos un momento a que 'supabase' esté definido en el navegador
-            if (typeof supabase === 'undefined') {
-                setTimeout(inicializarDashboard, 200);
-                return;
-            }
-
-            // 2. Usamos la misma configuración que en navbar.js
-            const SUPABASE_URL = "https://kdwqdjfafywzttupgdvw.supabase.co";
-            const SUPABASE_ANON_KEY = "sb_publishable_TmaZmfzJZU9WHpNMQgQ2wg_xZvPknuT";
-            const client = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-
-            // 3. Obtenemos la sesión directamente
-            const { data: { session } } = await client.auth.getSession();
-
-            if (session) {
-                console.log("Usuario autenticado:", session.user.email);
-                
-                // Ocultar loader y mostrar zona privada
-                document.getElementById('loader').classList.add('hidden');
-                document.getElementById('zona-privada').classList.remove('hidden');
-                
-                // Aquí podrías cargar datos desde tu DB si lo necesitas:
-                // cargarDatosDesdeSupabase(session.user.id);
-            } else {
-                // Si no hay sesión, regresamos al inicio
-                window.location.href = './index.html';
-            }
+    // 1. Esperamos a que la librería de Supabase esté disponible
+    async function inicializarDashboard() {
+        if (typeof supabase === 'undefined') {
+            setTimeout(inicializarDashboard, 200);
+            return;
         }
 
-        // Ejecutar al cargar la página
-        window.onload = inicializarDashboard;
+        // 2. Definimos el cliente localmente para este archivo
+        const SUPABASE_URL = "https://kdwqdjfafywzttupgdvw.supabase.co";
+        const SUPABASE_ANON_KEY = "sb_publishable_TmaZmfzJZU9WHpNMQgQ2wg_xZvPknuT";
+        const client = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-        async function actualizarPerfil(event) {
-            event.preventDefault();
-            alert("Perfil guardado con éxito");
-            // Aquí irá tu lógica de supabase.from('perfiles').upsert(...)
+        // 3. Verificamos la sesión directamente
+        const { data: { session } } = await client.auth.getSession();
+
+        if (session) {
+            // Usuario autenticado correctamente
+            document.getElementById('loader').classList.add('hidden');
+            document.getElementById('zona-privada').classList.remove('hidden');
+            console.log("Dashboard cargado para:", session.user.email);
+        } else {
+            // Si no hay sesión, redirigimos al login
+            window.location.href = './index.html';
         }
-    </script>
-</body>
-</html>
+    }
+
+    // Ejecutar al cargar la página
+    window.onload = inicializarDashboard;
+
+    async function actualizarPerfil(event) {
+        event.preventDefault();
+        alert("Perfil actualizado correctamente");
+    }
+</script>
